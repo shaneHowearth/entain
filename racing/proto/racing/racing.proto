@@ -10,6 +10,13 @@ service Racing {
   rpc ListRaces(ListRacesRequest) returns (ListRacesResponse) {}
 }
 
+// Define enumeration for sorting direction
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0; // The default, or 'unspecified', value.
+  SORT_DIRECTION_ASC = 1;         // Ascending order.
+  SORT_DIRECTION_DESC = 2;        // Descending order.
+}
+
 /* Requests/Responses */
 
 message ListRacesRequest {

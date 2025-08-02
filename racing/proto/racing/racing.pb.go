@@ -22,6 +22,56 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Define enumeration for sorting direction
+type SortDirection int32
+
+const (
+	SortDirection_SORT_DIRECTION_UNSPECIFIED SortDirection = 0 // The default, or 'unspecified', value.
+	SortDirection_SORT_DIRECTION_ASC         SortDirection = 1 // Ascending order.
+	SortDirection_SORT_DIRECTION_DESC        SortDirection = 2 // Descending order.
+)
+
+// Enum value maps for SortDirection.
+var (
+	SortDirection_name = map[int32]string{
+		0: "SORT_DIRECTION_UNSPECIFIED",
+		1: "SORT_DIRECTION_ASC",
+		2: "SORT_DIRECTION_DESC",
+	}
+	SortDirection_value = map[string]int32{
+		"SORT_DIRECTION_UNSPECIFIED": 0,
+		"SORT_DIRECTION_ASC":         1,
+		"SORT_DIRECTION_DESC":        2,
+	}
+)
+
+func (x SortDirection) Enum() *SortDirection {
+	p := new(SortDirection)
+	*p = x
+	return p
+}
+
+func (x SortDirection) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SortDirection) Descriptor() protoreflect.EnumDescriptor {
+	return file_racing_racing_proto_enumTypes[0].Descriptor()
+}
+
+func (SortDirection) Type() protoreflect.EnumType {
+	return &file_racing_racing_proto_enumTypes[0]
+}
+
+func (x SortDirection) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SortDirection.Descriptor instead.
+func (SortDirection) EnumDescriptor() ([]byte, []int) {
+	return file_racing_racing_proto_rawDescGZIP(), []int{0}
+}
+
 type ListRacesRequest struct {
 	state         protoimpl.MessageState  `protogen:"open.v1"`
 	Filter        *ListRacesRequestFilter `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
@@ -277,7 +327,11 @@ const file_racing_racing_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x16\n" +
 	"\x06number\x18\x04 \x01(\x03R\x06number\x12\x18\n" +
 	"\avisible\x18\x05 \x01(\bR\avisible\x12N\n" +
-	"\x15advertised_start_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x13advertisedStartTime2L\n" +
+	"\x15advertised_start_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x13advertisedStartTime*`\n" +
+	"\rSortDirection\x12\x1e\n" +
+	"\x1aSORT_DIRECTION_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12SORT_DIRECTION_ASC\x10\x01\x12\x17\n" +
+	"\x13SORT_DIRECTION_DESC\x10\x022L\n" +
 	"\x06Racing\x12B\n" +
 	"\tListRaces\x12\x18.racing.ListRacesRequest\x1a\x19.racing.ListRacesResponse\"\x00B\tZ\a/racingb\x06proto3"
 
@@ -293,20 +347,22 @@ func file_racing_racing_proto_rawDescGZIP() []byte {
 	return file_racing_racing_proto_rawDescData
 }
 
+var file_racing_racing_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_racing_racing_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_racing_racing_proto_goTypes = []any{
-	(*ListRacesRequest)(nil),       // 0: racing.ListRacesRequest
-	(*ListRacesResponse)(nil),      // 1: racing.ListRacesResponse
-	(*ListRacesRequestFilter)(nil), // 2: racing.ListRacesRequestFilter
-	(*Race)(nil),                   // 3: racing.Race
-	(*timestamppb.Timestamp)(nil),  // 4: google.protobuf.Timestamp
+	(SortDirection)(0),             // 0: racing.SortDirection
+	(*ListRacesRequest)(nil),       // 1: racing.ListRacesRequest
+	(*ListRacesResponse)(nil),      // 2: racing.ListRacesResponse
+	(*ListRacesRequestFilter)(nil), // 3: racing.ListRacesRequestFilter
+	(*Race)(nil),                   // 4: racing.Race
+	(*timestamppb.Timestamp)(nil),  // 5: google.protobuf.Timestamp
 }
 var file_racing_racing_proto_depIdxs = []int32{
-	2, // 0: racing.ListRacesRequest.filter:type_name -> racing.ListRacesRequestFilter
-	3, // 1: racing.ListRacesResponse.races:type_name -> racing.Race
-	4, // 2: racing.Race.advertised_start_time:type_name -> google.protobuf.Timestamp
-	0, // 3: racing.Racing.ListRaces:input_type -> racing.ListRacesRequest
-	1, // 4: racing.Racing.ListRaces:output_type -> racing.ListRacesResponse
+	3, // 0: racing.ListRacesRequest.filter:type_name -> racing.ListRacesRequestFilter
+	4, // 1: racing.ListRacesResponse.races:type_name -> racing.Race
+	5, // 2: racing.Race.advertised_start_time:type_name -> google.protobuf.Timestamp
+	1, // 3: racing.Racing.ListRaces:input_type -> racing.ListRacesRequest
+	2, // 4: racing.Racing.ListRaces:output_type -> racing.ListRacesResponse
 	4, // [4:5] is the sub-list for method output_type
 	3, // [3:4] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -325,13 +381,14 @@ func file_racing_racing_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_racing_racing_proto_rawDesc), len(file_racing_racing_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_racing_racing_proto_goTypes,
 		DependencyIndexes: file_racing_racing_proto_depIdxs,
+		EnumInfos:         file_racing_racing_proto_enumTypes,
 		MessageInfos:      file_racing_racing_proto_msgTypes,
 	}.Build()
 	File_racing_racing_proto = out.File

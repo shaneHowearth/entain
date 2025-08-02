@@ -166,6 +166,7 @@ type ListRacesRequestFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	MeetingIds    []int64                `protobuf:"varint,1,rep,packed,name=meeting_ids,json=meetingIds,proto3" json:"meeting_ids,omitempty"`
 	Visible       *bool                  `protobuf:"varint,2,opt,name=visible,proto3,oneof" json:"visible,omitempty"`
+	SortDirection *SortDirection         `protobuf:"varint,3,opt,name=sort_direction,json=sortDirection,proto3,enum=racing.SortDirection,oneof" json:"sort_direction,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -212,6 +213,13 @@ func (x *ListRacesRequestFilter) GetVisible() bool {
 		return *x.Visible
 	}
 	return false
+}
+
+func (x *ListRacesRequestFilter) GetSortDirection() SortDirection {
+	if x != nil && x.SortDirection != nil {
+		return *x.SortDirection
+	}
+	return SortDirection_SORT_DIRECTION_UNSPECIFIED
 }
 
 // A race resource.
@@ -313,13 +321,15 @@ const file_racing_racing_proto_rawDesc = "" +
 	"\x10ListRacesRequest\x126\n" +
 	"\x06filter\x18\x01 \x01(\v2\x1e.racing.ListRacesRequestFilterR\x06filter\"7\n" +
 	"\x11ListRacesResponse\x12\"\n" +
-	"\x05races\x18\x01 \x03(\v2\f.racing.RaceR\x05races\"d\n" +
+	"\x05races\x18\x01 \x03(\v2\f.racing.RaceR\x05races\"\xba\x01\n" +
 	"\x16ListRacesRequestFilter\x12\x1f\n" +
 	"\vmeeting_ids\x18\x01 \x03(\x03R\n" +
 	"meetingIds\x12\x1d\n" +
-	"\avisible\x18\x02 \x01(\bH\x00R\avisible\x88\x01\x01B\n" +
+	"\avisible\x18\x02 \x01(\bH\x00R\avisible\x88\x01\x01\x12A\n" +
+	"\x0esort_direction\x18\x03 \x01(\x0e2\x15.racing.SortDirectionH\x01R\rsortDirection\x88\x01\x01B\n" +
 	"\n" +
-	"\b_visible\"\xcb\x01\n" +
+	"\b_visibleB\x11\n" +
+	"\x0f_sort_direction\"\xcb\x01\n" +
 	"\x04Race\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
@@ -360,14 +370,15 @@ var file_racing_racing_proto_goTypes = []any{
 var file_racing_racing_proto_depIdxs = []int32{
 	3, // 0: racing.ListRacesRequest.filter:type_name -> racing.ListRacesRequestFilter
 	4, // 1: racing.ListRacesResponse.races:type_name -> racing.Race
-	5, // 2: racing.Race.advertised_start_time:type_name -> google.protobuf.Timestamp
-	1, // 3: racing.Racing.ListRaces:input_type -> racing.ListRacesRequest
-	2, // 4: racing.Racing.ListRaces:output_type -> racing.ListRacesResponse
-	4, // [4:5] is the sub-list for method output_type
-	3, // [3:4] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 2: racing.ListRacesRequestFilter.sort_direction:type_name -> racing.SortDirection
+	5, // 3: racing.Race.advertised_start_time:type_name -> google.protobuf.Timestamp
+	1, // 4: racing.Racing.ListRaces:input_type -> racing.ListRacesRequest
+	2, // 5: racing.Racing.ListRaces:output_type -> racing.ListRacesResponse
+	5, // [5:6] is the sub-list for method output_type
+	4, // [4:5] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_racing_racing_proto_init() }

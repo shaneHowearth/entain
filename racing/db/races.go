@@ -94,6 +94,26 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 		query += " WHERE " + strings.Join(clauses, " AND ")
 	}
 
+	// Order filter.
+	// This allows the user to sort the rows by advertised start time,
+	// Ascending, or Descending.
+	// ORDER BY date_column DESC;
+	// Note: This clause MUST be after the WHERE, and any HAVING, clauses, but
+	// before any LIMIT or OFFSET clauses.
+	// Other order by clauses for different fields can be added here too.
+	// Finally: advertisedStartTime is hard coded here, but there's no reason
+	// that it cannot be another variable passed in by the user.
+	if filter.SortDirection != nil {
+		direction := ""
+		switch *filter.SortDirection {
+		case 1:
+			direction = " ORDER BY advertised_start_time ASC"
+		case 2:
+			direction = " ORDER BY advertised_start_time DESC"
+		}
+		query += direction
+	}
+
 	return query, args
 }
 

@@ -117,6 +117,10 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 	return query, args
 }
 
+// testableTimeNow - this can be overriden by a test in the same package,
+// allowing deterministic testing without having to manipulate the race data.
+var testableTimeNow = time.Now
+
 func (m *racesRepo) scanRaces(
 	rows *sql.Rows,
 ) ([]*racing.Race, error) {
@@ -140,6 +144,17 @@ func (m *racesRepo) scanRaces(
 		}
 
 		race.AdvertisedStartTime = ts
+
+		// Set race status as open or closed.
+		// A race is closed if its advertised starttime has passed.
+		// Note: the cut off time is hardcoded to Now, but there's no reason
+		// that it couldn't be passed in as a variable if desired.
+		status := "OPEN"
+		if advertisedStart.Before(testableTimeNow()) {
+			status = "CLOSED"
+		}
+
+		race.Status = status
 
 		races = append(races, &race)
 	}

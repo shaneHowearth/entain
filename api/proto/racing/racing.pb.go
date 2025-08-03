@@ -240,8 +240,10 @@ type Race struct {
 	Visible bool `protobuf:"varint,5,opt,name=visible,proto3" json:"visible,omitempty"`
 	// AdvertisedStartTime is the time the race is advertised to run.
 	AdvertisedStartTime *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=advertised_start_time,json=advertisedStartTime,proto3" json:"advertised_start_time,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Status is whether a race is OPEN or CLOSED.
+	Status        string `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Race) Reset() {
@@ -316,6 +318,13 @@ func (x *Race) GetAdvertisedStartTime() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *Race) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
 var File_racing_racing_proto protoreflect.FileDescriptor
 
 const file_racing_racing_proto_rawDesc = "" +
@@ -332,7 +341,7 @@ const file_racing_racing_proto_rawDesc = "" +
 	"\x0esort_direction\x18\x03 \x01(\x0e2\x15.racing.SortDirectionH\x01R\rsortDirection\x88\x01\x01B\n" +
 	"\n" +
 	"\b_visibleB\x11\n" +
-	"\x0f_sort_direction\"\xcb\x01\n" +
+	"\x0f_sort_direction\"\xe3\x01\n" +
 	"\x04Race\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
@@ -340,7 +349,8 @@ const file_racing_racing_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x16\n" +
 	"\x06number\x18\x04 \x01(\x03R\x06number\x12\x18\n" +
 	"\avisible\x18\x05 \x01(\bR\avisible\x12N\n" +
-	"\x15advertised_start_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x13advertisedStartTime*`\n" +
+	"\x15advertised_start_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x13advertisedStartTime\x12\x16\n" +
+	"\x06status\x18\a \x01(\tR\x06status*`\n" +
 	"\rSortDirection\x12\x1e\n" +
 	"\x1aSORT_DIRECTION_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12SORT_DIRECTION_ASC\x10\x01\x12\x17\n" +

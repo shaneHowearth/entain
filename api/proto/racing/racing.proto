@@ -13,6 +13,13 @@ service Racing {
   }
 }
 
+// Define enumeration for sorting direction
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0; // The default, or 'unspecified', value.
+  SORT_DIRECTION_ASC = 1;         // Ascending order.
+  SORT_DIRECTION_DESC = 2;        // Descending order.
+}
+
 /* Requests/Responses */
 
 // Request for ListRaces call.
@@ -29,6 +36,7 @@ message ListRacesResponse {
 message ListRacesRequestFilter {
   repeated int64 meeting_ids = 1;
   optional bool visible = 2;
+  optional SortDirection sort_direction = 3;
 }
 
 /* Resources */

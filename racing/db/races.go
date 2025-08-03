@@ -17,6 +17,9 @@ type RacesRepo interface {
 	// Init will initialise our races repository.
 	Init() error
 
+	// Get will return a race.
+	Get(raceId int64) (*racing.Race, error)
+
 	// List will return a list of races.
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
 }
@@ -41,6 +44,28 @@ func (r *racesRepo) Init() error {
 	})
 
 	return err
+}
+
+func (r *racesRepo) Get(raceId int64) (*racing.Race, error) {
+	var (
+		err   error
+		query string
+	)
+
+	query = getRaceQueries()[racesList]
+
+	query += " WHERE id = ?"
+	rows, err := r.db.Query(query, raceId)
+	if err != nil {
+		return nil, err
+	}
+
+	races, err := r.scanRaces(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	return races[0], nil
 }
 
 func (r *racesRepo) List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error) {

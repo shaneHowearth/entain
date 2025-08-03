@@ -18,6 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RacingClient interface {
+	// GetRace will return a single race.
+	GetRace(ctx context.Context, in *GetRaceRequest, opts ...grpc.CallOption) (*GetRaceResponse, error)
 	// ListRaces will return a collection of all races.
 	ListRaces(ctx context.Context, in *ListRacesRequest, opts ...grpc.CallOption) (*ListRacesResponse, error)
 }
@@ -28,6 +30,15 @@ type racingClient struct {
 
 func NewRacingClient(cc grpc.ClientConnInterface) RacingClient {
 	return &racingClient{cc}
+}
+
+func (c *racingClient) GetRace(ctx context.Context, in *GetRaceRequest, opts ...grpc.CallOption) (*GetRaceResponse, error) {
+	out := new(GetRaceResponse)
+	err := c.cc.Invoke(ctx, "/racing.Racing/GetRace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *racingClient) ListRaces(ctx context.Context, in *ListRacesRequest, opts ...grpc.CallOption) (*ListRacesResponse, error) {
@@ -43,6 +54,8 @@ func (c *racingClient) ListRaces(ctx context.Context, in *ListRacesRequest, opts
 // All implementations should embed UnimplementedRacingServer
 // for forward compatibility
 type RacingServer interface {
+	// GetRace will return a single race.
+	GetRace(context.Context, *GetRaceRequest) (*GetRaceResponse, error)
 	// ListRaces will return a collection of all races.
 	ListRaces(context.Context, *ListRacesRequest) (*ListRacesResponse, error)
 }
@@ -51,6 +64,9 @@ type RacingServer interface {
 type UnimplementedRacingServer struct {
 }
 
+func (UnimplementedRacingServer) GetRace(context.Context, *GetRaceRequest) (*GetRaceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRace not implemented")
+}
 func (UnimplementedRacingServer) ListRaces(context.Context, *ListRacesRequest) (*ListRacesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRaces not implemented")
 }
@@ -64,6 +80,24 @@ type UnsafeRacingServer interface {
 
 func RegisterRacingServer(s grpc.ServiceRegistrar, srv RacingServer) {
 	s.RegisterService(&Racing_ServiceDesc, srv)
+}
+
+func _Racing_GetRace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RacingServer).GetRace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/racing.Racing/GetRace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RacingServer).GetRace(ctx, req.(*GetRaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Racing_ListRaces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -91,6 +125,10 @@ var Racing_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "racing.Racing",
 	HandlerType: (*RacingServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetRace",
+			Handler:    _Racing_GetRace_Handler,
+		},
 		{
 			MethodName: "ListRaces",
 			Handler:    _Racing_ListRaces_Handler,

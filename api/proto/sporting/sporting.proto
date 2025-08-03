@@ -1,0 +1,74 @@
+syntax = "proto3";
+package sporting;
+
+option go_package = "/sporting";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service Sporting {
+  // GetEvent returns a sport.
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse) {
+    option (google.api.http) = { get: "/v1/events/{event_id}"};
+  }
+  // ListEvents returns a list of all Events.
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse) {
+    option (google.api.http) = { post: "/v1/list-events", body: "*" };
+  }
+}
+
+// Define enumeration for sorting direction
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0; // The default, or 'unspecified', value.
+  SORT_DIRECTION_ASC = 1;         // Ascending order.
+  SORT_DIRECTION_DESC = 2;        // Descending order.
+}
+
+/* Requests/Responses */
+
+// Request for retrieving a single event (by ID).
+message GetEventRequest {
+  int64 event_id = 1;
+}
+
+// Response to GetEvent call.
+message GetEventResponse {
+  Event event = 1;
+}
+
+// Request for ListEvents call.
+message ListEventsRequest {
+  ListEventsRequestFilter filter = 1;
+}
+
+// Response to ListEvents call.
+message ListEventsResponse {
+  repeated Event events = 1;
+}
+
+// Filter for listing events.
+message ListEventsRequestFilter {
+  repeated int64 meeting_ids = 1;
+  optional bool visible = 2;
+  optional SortDirection sort_direction = 3;
+}
+
+/* Resources */
+
+// A event resource.
+message Event {
+  // ID represents a unique identifier for the event.
+  int64 id = 1;
+  // MeetingID represents a unique identifier for the events meeting.
+  int64 meeting_id = 2;
+  // Name is the official name given to the event.
+  string name = 3;
+  // Number represents the number of the event.
+  int64 number = 4;
+  // Visible represents whether or not the event is visible.
+  bool visible = 5;
+  // AdvertisedStartTime is the time the event is advertised to run.
+  google.protobuf.Timestamp advertised_start_time = 6;
+  // Status is whether a event is OPEN or CLOSED.
+  string status = 7;
+}

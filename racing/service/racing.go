@@ -7,6 +7,8 @@ import (
 )
 
 type Racing interface {
+	// GetRace will return a single race.
+	GetRace(ctx context.Context, in *racing.GetRaceRequest) (*racing.GetRaceResponse, error)
 	// ListRaces will return a collection of races.
 	ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error)
 }
@@ -21,6 +23,14 @@ func NewRacingService(racesRepo db.RacesRepo) Racing {
 	return &racingService{racesRepo}
 }
 
+func (s *racingService) GetRace(ctx context.Context, in *racing.GetRaceRequest) (*racing.GetRaceResponse, error) {
+	race, err := s.racesRepo.Get(in.GetRaceId())
+	if err != nil {
+		return nil, err
+	}
+
+	return &racing.GetRaceResponse{Race: race}, nil
+}
 func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error) {
 	races, err := s.racesRepo.List(in.Filter)
 	if err != nil {
